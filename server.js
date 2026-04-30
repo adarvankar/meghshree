@@ -45,6 +45,14 @@ io.on('connection', (socket) => {
     socket.emit('session-created', { sessionId });
   });
 
+  socket.on('close-session', ({ sessionId }) => {
+    if (sessions.has(sessionId)) {
+      socket.to(sessionId).emit('peer-disconnected', { role: 'tech' });
+      sessions.delete(sessionId);
+      console.log(`[Session] Closed by tech: ${sessionId}`);
+    }
+  });
+
   // Client joins using the 6-digit session code
   socket.on('join-session', ({ sessionId }) => {
     const session = sessions.get(sessionId);
