@@ -91,9 +91,8 @@ io.on('connection', (socket) => {
 
   // ─── Chat ─────────────────────────────────────────────────────────────────
 
-  socket.on('chat-message', ({ sessionId, message, sender }) => {
-    const timestamp = new Date().toLocaleTimeString();
-    // Only send to the OTHER person, not back to sender
+  socket.on('chat-message', ({ sessionId, message, sender, timestamp }) => {
+    // Relay to other party using sender's local timestamp
     socket.to(sessionId).emit('chat-message', { message, sender, timestamp });
   });
 
