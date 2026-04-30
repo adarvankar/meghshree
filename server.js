@@ -93,7 +93,8 @@ io.on('connection', (socket) => {
 
   socket.on('chat-message', ({ sessionId, message, sender }) => {
     const timestamp = new Date().toLocaleTimeString();
-    io.to(sessionId).emit('chat-message', { message, sender, timestamp });
+    // Only send to the OTHER person, not back to sender
+    socket.to(sessionId).emit('chat-message', { message, sender, timestamp });
   });
 
   // ─── Remote Commands (Technician → Client) ────────────────────────────────
